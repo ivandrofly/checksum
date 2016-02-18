@@ -17,15 +17,10 @@ namespace Checksum
 
         private Thread thd;
 
-        // Delegates Type
-        private delegate void delEnableForm();
-        private delegate void delSetText1();
-        private delegate void delSetText2();
-
         // Delegates object
-        private delEnableForm EnableFormdel;
-        private delSetText1 SetText1del;
-        private delSetText2 SetText2del;
+        private MethodInvoker EnableFormdel;
+        private MethodInvoker SetText1del;
+        private MethodInvoker SetText2del;
 
         private readonly OpenFileDialog _openFileDialogue = new OpenFileDialog()
         { Title = "Select file", Filter = "All files|*.*", CheckFileExists = true, Multiselect = false };
@@ -33,7 +28,7 @@ namespace Checksum
         public frmMain()
         {
             // TODO: this shouldn't be madatory.
-            Utils.CheckRegistry();
+            Utils.AddToContextMenu();
 
             InitializeComponent();
             cmbMethod.Items.AddRange(new string[] { "SHA1", "SHA256", "SHA512", "MD5" });
@@ -42,9 +37,9 @@ namespace Checksum
             link.LinkData = "https://github.com/victorheld/checksum#checksum";
             alblGitHub.Links.Add(link);
 
-            EnableFormdel = new delEnableForm(EnableForm);
-            SetText1del = new delSetText1(SetText1);
-            SetText2del = new delSetText2(SetText2);
+            EnableFormdel = EnableForm;
+            SetText1del = SetText1;
+            SetText2del = SetText2;
 
             //Drag&Drop
             //this.AllowDrop = true;

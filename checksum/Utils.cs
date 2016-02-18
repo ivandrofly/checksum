@@ -12,7 +12,7 @@ namespace Checksum
 {
     public static class Utils
     {
-        public static void CheckRegistry()
+        public static void AddToContextMenu()
         {
             string regkey = (string)Registry.GetValue("HKEY_CLASSES_ROOT\\*\\shell\\Checksum\\command", null, null);
             string regIcon = (string)Registry.GetValue("HKEY_CLASSES_ROOT\\*\\shell\\Checksum", "Icon", null);
@@ -22,6 +22,13 @@ namespace Checksum
                 Registry.SetValue("HKEY_CLASSES_ROOT\\*\\shell\\Checksum", "Icon", Application.ExecutablePath);
         }
 
+        public static void RemoveFromContextMenu()
+        {
+            var checkSumKey = Registry.ClassesRoot.OpenSubKey("*\\shell\\", true);
+            checkSumKey.DeleteSubKeyTree("Checksum");
+            checkSumKey.Close();
+        }
+
         public static string CalculateMD5Hash(string file)
         {
             using (var md5 = MD5.Create())
@@ -29,7 +36,7 @@ namespace Checksum
             {
                 byte[] b = md5.ComputeHash(stream);
                 stream.Close();
-                return BitConverter.ToString(b).Replace("-", "").ToLower();
+                return BitConverter.ToString(b).Replace("-", string.Empty).ToLower();
             }
         }
 
@@ -40,7 +47,7 @@ namespace Checksum
             {
                 byte[] b = sha1.ComputeHash(stream);
                 stream.Close();
-                return BitConverter.ToString(b).Replace("-", "").ToLower();
+                return BitConverter.ToString(b).Replace("-", string.Empty).ToLower();
             }
         }
 
@@ -51,7 +58,7 @@ namespace Checksum
             {
                 byte[] b = sha256.ComputeHash(stream);
                 stream.Close();
-                return BitConverter.ToString(b).Replace("-", "").ToLower();
+                return BitConverter.ToString(b).Replace("-", string.Empty).ToLower();
             }
         }
 
@@ -62,7 +69,7 @@ namespace Checksum
             {
                 byte[] b = sha512.ComputeHash(stream);
                 stream.Close();
-                return BitConverter.ToString(b).Replace("-", "").ToLower();
+                return BitConverter.ToString(b).Replace("-", string.Empty).ToLower();
             }
         }
 
